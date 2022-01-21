@@ -27,6 +27,35 @@
     //this will be used to detect collisions
     var ballRadius = 10;
 
+    // define paddle dimensions
+    var paddleHeight = 10;
+    var paddleWidth = 75;
+    var paddleX = (canvas.width - paddleWidth) / 2;
+
+    // user inputs
+    var rightPressed = false;
+    var leftPressed = false;
+    document.addEventListener("keydown", keyDownHandler, false);
+    document.addEventListener("keyup", keyUpHandler, false);
+
+    function keyDownHandler(e) {
+        if (e.key == "Right" || e.key == "ArrowRight") {
+            rightPressed = true;
+        }
+        else if (e.key == "Left" || e.key == "ArrowLeft") {
+            leftPressed = true;
+        }
+    }
+    function keyUpHandler(e) {
+        if (e.key == "Right" || e.key == "ArrowRight") {
+            rightPressed = false;
+        }
+        else if (e.key == "Left" || e.key == "ArrowLeft") {
+            leftPressed = false;
+        }
+    }
+
+
 // draw the ball
     function drawBall() {
         ctx.beginPath();
@@ -35,10 +64,21 @@
         ctx.fill();
         ctx.closePath();
     }
+
+// draw the paddle 
+    function drawPaddle() {
+        ctx.beginPath();
+        ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+        ctx.fillStyle = "green";
+        ctx.fill();
+        ctx.closePath();
+        }
+
 // redraw ball and clear canvas so there's no trail
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawBall();
+        drawPaddle();
         x += dx;
         y += dy;
         if (x + dx > canvas.width - ballRadius|| x + dx < ballRadius) {
@@ -47,8 +87,20 @@
         if (y + dy > canvas.height - ballRadius|| y + dy < ballRadius) {
             dy = -dy;
         }
-    }
 
+        if (rightPressed) {
+            paddleX += 7;
+            if (paddleX + paddleWidth > canvas.width) {
+                paddleX = canvas.width - paddleWidth;
+            }
+        }
+        else if (leftPressed) {
+            paddleX -= 7;
+            if (paddleX < 0) {
+                paddleX = 0;
+            }
+        }
+    }
     setInterval(draw, 10);
 
 
