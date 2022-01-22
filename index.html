@@ -86,23 +86,24 @@
     }
 
     function collisionDetection() {
+        var gameIsOver = true;
         for (var c = 0; c < brickColumnCount; c++) {
             for (var r = 0; r < brickRowCount; r++) {
                 var b = bricks[c][r];
                 // calculations
                 if(b.status == 1) {
+                    gameIsOver = false;
                     // if the ball collides with the brick, change status to 0 so it will disappear
                     if(x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
                         dy = -dy;
                         b.status = 0;
-                        score++;
+                        score+= 2;
                         // if you hit all bricks, show winning message
-                        if (score == brickRowCount * brickColumnCount) {
-                            alert("YOU WIN, CONGRATULATIONS!");
-                            document.location.reload();
-                            clearInterval(interval); // Needed for Chrome to end game
-                        }
                     }
+                }
+                if (gameIsOver == true) {
+                    alert("YOU WIN, CONGRATULATIONS! your score:" + score);
+                    document.location.reload();
                 }
             }
         }
@@ -203,10 +204,7 @@
         y += dy;
         requestAnimationFrame(draw)
     }
-
     draw();
-
-
 </script>
 
 </body>
